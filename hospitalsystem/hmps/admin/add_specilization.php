@@ -4,17 +4,19 @@ session_start();
 include('include/config.php');
 include('include/checklogin.php');
 check_login();
-if(isset($_POST['submit']))
+if(isset($_GET['submit']))
 {
-$sql=$conn->query("insert into doctorspecilization(specilization) values('".$_POST['doctorspecilization']."')");
+$sql=$conn->query("insert into doctorSpecilization(specilization) values('".$_GET['doctorspecilization']."')");
 $_SESSION['msg']="Doctor Specialization added successfully !!";
 }
 
 if(isset($_GET['del']))
       {
-              $conn->query("delete from doctorspecilization where id = '".$_GET['id']."'");
+              $conn->query("delete from doctorSpecilization where id = '".$_GET['id']."'");
                   $_SESSION['msg']="data deleted !!";
       }
+
+     
 ?>
 <!DOCTYPE html>
 <html>
@@ -375,24 +377,24 @@ if(isset($_GET['del']))
             </div>
             <div class="card-body">
               <form>
-                <div class="panel-body">
+                 <div class="card-body px-lg-5 py-lg-5">
+             
                 <p style="color:red;"><?php echo htmlentities($_SESSION['msg']);?>
                 <?php echo htmlentities($_SESSION['msg']="");?></p> 
-                          <form role="form" name="dcotorspcl" method="post" >
-                            <div class="form-group">
-                              <label for="exampleInputEmail1">
-                                Doctor Specialization
-                              </label>
-              <input type="text" name="doctorspecilization" class="form-control"  placeholder="Enter Doctor Specialization">
-                            </div>
-                        
-                            
-                            
-                            
-                            <button type="submit" name="submit" class="btn btn-o btn-primary">
-                              Submit
-                            </button>
+                <form role="form" name="dcotorspcl" method="post" >
+                <div class="form-group">
+                  <label >Doctor Specialization</label>
+                  <div class="input-group input-group-merge input-group-alternative mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                    </div>
+                    <input class="form-control" placeholder="Enter Doctor Specialization" name="doctorspecilization" type="text">
+                  </div>
+                </div>
+               
+                  <button type="submit" class="btn btn-primary mt-4" name="submit" >Submit</button>
                           </form>
+                       
                         </div>
                 <div class="table-responsive">
               <!-- Projects table -->
@@ -420,16 +422,15 @@ if(isset($_GET['del']))
                         <td><?php echo $row['updationDate'];?>
                         </td>
                         <td class="text-right">
-                      <div class="visible-md visible-lg hidden-sm hidden-xs">
-              <a href="edit-doctor-specialization.php?id=<?php echo $row['id'];?>" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit"><i class="fa fa-pencil"></i></a>
-                          
-  <a href="add_specilization.php?id=<?php echo $row['id']?>&del=delete" onClick="return confirm('Are you sure you want to delete?')"class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Remove"><i class="fa fa-times fa fa-white"></i></a>
-                        </div>
-                        <div class="visible-xs visible-sm hidden-md hidden-lg">
-                          <div class="btn-group" dropdown is-open="status.isopen">
-                            <button type="button" class="btn btn-primary btn-o btn-sm dropdown-toggle" dropdown-toggle>
-                              <i class="fa fa-cog"></i>&nbsp;<span class="caret"></span>
-                            </button>
+                          <div class="dropdown">
+                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          <a class="dropdown-item" href="edit_doctor_specialization.php?id=<?php echo $row['id'];?>" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit">Edit Doctor-info</a>
+
+                          <a class="dropdown-item" href="add_specilization.php?id=<?php echo $row['id']?>&del=delete" onClick="return confirm('Are you sure you want to delete?')" class="btn btn-transparent btn-xs">Delete</a>
+                       </div>
                     </td>
                       </tr>
                       

@@ -47,19 +47,19 @@ check_login();
           <ul class="navbar-nav">
             <li class="nav-item">
               <a class="nav-link active" href="dashboard.php">
-                <i class="ni ni-tv-2 text-primary"></i>
+                <i class="ni ni-single-02 text-yellow"></i>
                 <span class="nav-link-text">Dashboard</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="manage_doctors.php">
-                <i class="ni ni-planet text-orange"></i>
+                <i class="ni ni-single-02 text-yellow"></i>
                 <span class="nav-link-text">Manage Doctor</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="add_doctor.php">
-                <i class="ni ni-pin-3 text-primary"></i>
+                <i class="ni ni-single-02 text-yellow"></i>
                 <span class="nav-link-text">Add Doctor</span>
               </a>
             </li>
@@ -67,12 +67,6 @@ check_login();
               <a class="nav-link" href="add_specilization.php">
                 <i class="ni ni-single-02 text-yellow"></i>
                 <span class="nav-link-text">Doctor Specialization</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="">
-                <i class="ni ni-bullet-list-67 text-default"></i>
-                <span class="nav-link-text">Apointment History</span>
               </a>
             </li>
             <li class="nav-item">
@@ -85,6 +79,12 @@ check_login();
               <a class="nav-link" href="">
                 <i class="ni ni-single-02 text-yellow"></i>
                 <span class="nav-link-text">add Patient</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">
+                <i class="ni ni-bullet-list-67 text-default"></i>
+                <span class="nav-link-text">Apointment History</span>
               </a>
             </li>
         
