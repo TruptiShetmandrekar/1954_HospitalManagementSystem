@@ -1,5 +1,6 @@
 <?php
 session_start();
+error_reporting(0);
 include("include/config.php");
 if(isset($_POST['submit']))
 {
@@ -7,12 +8,9 @@ $ret=$conn->query("SELECT * FROM doctors WHERE docEmail='".$_POST['username']."'
 $num=mysqli_fetch_array($ret);
 if($num>0)
 {
-$extra="dashboard.php";
-$_SESSION['dlogin']=$_POST['username'];
+$extra="dashboard.php";//
+$_SESSION['login']=$_POST['username'];
 $_SESSION['id']=$num['id'];
-$uip=$_SERVER['REMOTE_ADDR'];
-$status=1;
-$log=$conn->query("insert into doctorslog(uid,username,userip,status) values('".$_SESSION['id']."','".$_SESSION['dlogin']."','$uip','$status')");
 $host=$_SERVER['HTTP_HOST'];
 $uri=rtrim(dirname($_SERVER['PHP_SELF']),'/\\');
 header("location:http://$host$uri/$extra");
@@ -20,19 +18,16 @@ exit();
 }
 else
 {
-$host  = $_SERVER['HTTP_HOST'];
-$_SESSION['dlogin']=$_POST['username'];
-$uip=$_SERVER['REMOTE_ADDR'];
-$status=0;
-$conn->query("insert into doctorslog(username,userip,status) values('".$_SESSION['dlogin']."','$uip','$status')");
 $_SESSION['errmsg']="Invalid username or password";
 $extra="index.php";
+$host  = $_SERVER['HTTP_HOST'];
 $uri  = rtrim(dirname($_SERVER['PHP_SELF']),'/\\');
 header("location:http://$host$uri/$extra");
 exit();
 }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -59,11 +54,11 @@ exit();
 					</div>
 					<div class="card fat">
 						<div class="card-body">
-							<h4 class="card-title">Login</h4>
+							<h4 class="card-title">Doctor Login</h4>
 							<form method="POST" class="my-login-validation" novalidate="">
 								<div class="form-group">
 									<label for="email">E-Mail Address</label>
-									<input id="email" type="email" class="form-control" name="email" value="" required autofocus>
+									<input id="email" type="email" class="form-control" name="username" value="" required autofocus>
 									<div class="invalid-feedback">
 										Email is invalid
 									</div>

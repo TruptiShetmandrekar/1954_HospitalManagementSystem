@@ -1,65 +1,70 @@
-<?php error_reporting(0);?>
-<header class="navbar navbar-default navbar-static-top">
-					<!-- start: NAVBAR HEADER -->
-					<div class="navbar-header">
-						<a href="#" class="sidebar-mobile-toggler pull-left hidden-md hidden-lg" class="btn btn-navbar sidebar-toggle" data-toggle-class="app-slide-off" data-toggle-target="#app" data-toggle-click-outside="#sidebar">
-							<i class="ti-align-justify"></i>
-						</a>
-						<a class="navbar-brand" href="#">
-							<h2 style="padding-top:2% ">HMS</h2>
-						</a>
-						<a href="#" class="sidebar-toggler pull-right visible-md visible-lg" data-toggle-class="app-sidebar-closed" data-toggle-target="#app">
-							<i class="ti-align-justify"></i>
-						</a>
-						<a class="pull-right menu-toggler visible-xs-block" id="menu-toggler" data-toggle="collapse" href=".navbar-collapse">
-							<span class="sr-only">Toggle navigation</span>
-							<i class="ti-view-grid"></i>
-						</a>
-					</div>
-					<!-- end: NAVBAR HEADER -->
-					<!-- start: NAVBAR COLLAPSE -->
-					<div class="navbar-collapse collapse">
-						<ul class="nav navbar-right">
-							<!-- start: MESSAGES DROPDOWN -->
-								<li  style="padding-top:2% ">
-								<h2>Hospital Management System</h2>
-							</li>
-						
-						
-							<li class="dropdown current-user">
-								<a href class="dropdown-toggle" data-toggle="dropdown">
-									<img src="assets/images/avatar-1.jpg" alt="Peter"> <span class="username">
+
+ <div class="main-content" id="panel">
+    <!-- Topnav -->
+    <nav class="navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom">
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Search form -->
+         
+          <!-- Navbar links -->
+          <ul class="navbar-nav align-items-center  ml-md-auto ">
+            <li class="nav-item d-xl-none">
+              <!-- Sidenav toggler -->
+              <div class="pr-3 sidenav-toggler sidenav-toggler-dark" data-action="sidenav-pin" data-target="#sidenav-main">
+                <div class="sidenav-toggler-inner">
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                </div>
+              </div>
+            </li>
+            <li class="nav-item d-sm-none">
+              <a class="nav-link" href="#" data-action="search-show" data-target="#navbar-search-main">
+                <i class="ni ni-zoom-split-in"></i>
+              </a>
+            </li>
+          </ul>
+          <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
+            <li class="nav-item dropdown">
+              <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="media align-items-center">
+                  <span class="avatar avatar-sm rounded-circle">
+                    <img alt="Image placeholder" src="assets/img/avatar-4.jpg">
+                  </span>
+                  <div class="media-body  ml-2  d-none d-lg-block">
+                    <span class="mb-0 text-sm  font-weight-bold"><?php $query=$conn->query("select doctorName from doctors where id='".$_SESSION['id']."'");
+while($row=mysqli_fetch_array($query))
+{
+  echo $row['doctorName'];
+}
+                  ?> </span>
+                  </div>
+                </div>
 
 
-
-			Admin
-									<i class="ti-angle-down"></i></i></span>
-								</a>
-								<ul class="dropdown-menu dropdown-dark">
-									
-								
-									<li>
-										<a href="change-password.php">
-											Change Password
-										</a>
-									</li>
-									<li>
-										<a href="logout.php">
-											Log Out
-										</a>
-									</li>
-								</ul>
-							</li>
-							<!-- end: USER OPTIONS DROPDOWN -->
-						</ul>
-						<!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
-						<div class="close-handle visible-xs-block menu-toggler" data-toggle="collapse" href=".navbar-collapse">
-							<div class="arrow-left"></div>
-							<div class="arrow-right"></div>
-						</div>
-						<!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
-					</div>
-				
-					
-					<!-- end: NAVBAR COLLAPSE -->
-				</header>
+              </a>
+              <div class="dropdown-menu  dropdown-menu-right ">
+                <div class="dropdown-header noti-title">
+                  <h6 class="text-overflow m-0">Welcome!</h6>
+                </div>
+                <a href="edit_profile.php" class="dropdown-item">
+                  <i class="ni ni-single-02"></i>
+                  <span>My profile</span>
+                </a>
+              
+                <a href="change_password.php" class="dropdown-item">
+                  <i class="ni ni-settings-gear-65"></i>
+                  <span>change Password</span>
+                </a>
+                
+                <div class="dropdown-divider"></div>
+                <a href="logout.php" class="dropdown-item">
+                  <i class="ni ni-user-run"></i>
+                  <span>Logout</span>
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
