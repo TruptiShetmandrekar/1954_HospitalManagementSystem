@@ -3,27 +3,23 @@ session_start();
 //error_reporting(0);
 include('include/config.php');
 include('include/checklogin.php');
-check_login();
-
 if(isset($_POST['submit']))
 {
-
-$specilization=$_POST['Doctorspecialization'];
-$doctorid=$_POST['doctor'];
-$userid=$_SESSION['id'];
-$fees=$_POST['fees'];
-$appdate=$_POST['appdate'];
-$time=$_POST['apptime'];
-$userstatus=1;
-$docstatus=1;
-
-  $query=$conn->query("insert into appointment(doctorSpecialization,doctorId,userId,consultancyFees,appointmentDate,appointmentTime,userStatus,doctorStatus) values('$specilization','$doctorid','$userid','$fees','$appdate','$time','$userstatus','$docstatus')");
-  if($query)
-  {
-    echo "<script>alert('Your appointment successfully booked');</script>";
-  }
+ $fname=$_POST['full_name'];
+$address=$_POST['address'];
+$city=$_POST['city'];
+$gender=$_POST['gender'];
+$email=$_POST['email'];
+//$password=md5($_POST['password']);
+$sql=$conn->query("Update patient set fullName='$fname',address='$address',city='$city',gender='$gender',email='$email' where email='".$_SESSION['login']."'");
+if($sql)
+{
+echo "<script>alert('Patient Details updated Successfully');</script>";
 
 }
+}
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,50 +40,44 @@ $docstatus=1;
   <!-- Page plugins -->
   <!-- Argon CSS -->
   <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
-  
-<script type="text/javascript">
-function getdoctor(val) {
-  $.ajax({
-  type: "POST",
-  url: "get_doctors.php",
-  data:'specilizationid='+val,
-  success: function(data){
-    $("#doctor").html(data);
-  }
-  });
+  <script type="text/javascript">
+function valid()
+{
+ if(document.adddoc.npass.value!= document.adddoc.cfpass.value)
+{
+alert("Password and Confirm Password Field do not match  !!");
+document.adddoc.cfpass.focus();
+return false;
 }
-</script> 
-
-
-<script>
-function getfee(val) {
-  $.ajax({
-  type: "POST",
-  url: "get_doctors.php",
-  data:'doctor='+val,
-  success: function(data){
-    $("#fees").html(data);
-  }
-  });
+return true;
 }
-</script> 
-
+</script>
 
 </head>
 <body>
-  <!-- Sidenav -->
-     <?php include('include/sidebar.php');?>
+    <!-- Sidenav -->
+<?php include('include/sidebar.php');?>
   <!-- Main content -->
   <div class="main-content" id="panel">
-    <!-- Topnav -->
-     <?php include('include/header.php');?>
+ <?php include('include/header.php');?>
     <!-- Header -->
+
+
+  <!-- Sidenav -->
+  
+  <!-- Main content -->
+    <!-- Topnav -->
+    
+    <!-- Header -->
+    <!-- Header -->
+
+
     <div class="header bg-primary pb-6">
       <div class="container-fluid">
         <div class="header-body">
-          <div class="row align-items-center py-4">
-            <div class="col-lg-6 col-7">
-               <h6 class="h2 text-white d-inline-block mb-0"><?php $query=$conn->query("select fullName from patient where id='".$_SESSION['id']."'");
+           <div class="col-lg-6 col-7">
+              <h6 class="h2 text-white d-inline-block mb-0">
+                  <?php $query=$conn->query("select fullName from patient where id='".$_SESSION['id']."'");
 while($row=mysqli_fetch_array($query))
 {
   echo $row['fullName'];
@@ -97,11 +87,10 @@ while($row=mysqli_fetch_array($query))
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                   <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
                   <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">User</li>
+                  <li class="breadcrumb-item active" aria-current="page">Doctor</li>
                 </ol>
               </nav>
             </div>
-          </div>
         </div>
       </div>
     </div>
@@ -114,72 +103,60 @@ while($row=mysqli_fetch_array($query))
                     <div class="col-lg-8 col-md-12">
                       <div class="panel panel-white">
                         <div class="panel-heading">
-                          <h5 class="panel-title">Book Appointment</h5>
+                          <h5 class="panel-title">Edit Profile</h5>
                         </div>
                         <div class="panel-body">
-                <p style="color:red;"><?php echo htmlentities($_SESSION['msg1']);?>
-                <?php echo htmlentities($_SESSION['msg1']="");?></p>  
-                          <form role="form" name="book" method="post" >
-                            
-
-
-<div class="form-group">
-                              <label for="DoctorSpecialization">
-                                Doctor Specialization
-                              </label>
-              <select name="Doctorspecialization" class="form-control" onChange="getdoctor(this.value);" required="required">
-                                <option value="">Select Specialization</option>
-<?php $ret=$conn->query("select * from doctorspecilization");
-while($row=mysqli_fetch_array($ret))
+                  
+                         <?php $sql=$conn->query("select * from patient where email='".$_SESSION['login']."'");
+while($data=mysqli_fetch_array($sql))
 {
 ?>
-                                <option value="<?php echo htmlentities($row['specilization']);?>">
-                                  <?php echo htmlentities($row['specilization']);?>
-                                </option>
-                                <?php } ?>
-                                
-                              </select>
-                            </div>
+                          <form role="form" name="adddoc" method="post" onSubmit="return valid();">
+                    
 
-
-
-
-                            <div class="form-group">
-                              <label for="doctor">
-                                Doctors
-                              </label>
-            <select name="doctor" class="form-control" id="doctor" onChange="getfee(this.value);" required="required">
-            <option value="">Select Doctor</option>
-            </select>
-                            </div>
-
-                            <div class="form-group">
-                              <label for="consultancyfees">
-                                Consultancy Fees
-                              </label>
-          <select name="fees" class="form-control" id="docfees"  readonly >
-            
-            </select>
-                            </div>
-                            
 <div class="form-group">
-                              <label for="AppointmentDate">
-                                Date
+                              <label for="doctorname">
+                                 Patient Name
                               </label>
-                  <input class="form-control datepicker" name="appdate"  type="date" required="required">
+  <input type="text" name="full_name" class="form-control" value="<?php echo htmlentities($data['fullName']);?>" >
                             </div>
-                            
+
+
 <div class="form-group">
-                              <label for="Appointmenttime">
-                            
-                            Time
-                          
+                              <label for="address">
+                                 Address
                               </label>
-                  <input class="form-control datepicker" name="apptime" type="time" required="required">
-                            </div>                            
+          <textarea name="address" class="form-control"><?php echo htmlentities($data['address']);?></textarea>
+                            </div>
+<div class="form-group">
+                              <label for="fess">
+                                 City
+                              </label>
+    <input type="text" name="city" class="form-control" required="required"  value="<?php echo htmlentities($data['city']);?>" >
+                            </div>
+  
+<div class="form-group">
+                  <label for="fess">
+                                 Gender
+                              </label>
+          <input type="text" name="gender" class="form-control" required="required"  value="<?php echo htmlentities($data['gender']);?>">
+                            </div>
+
+<div class="form-group">
+                  <label for="fess">
+                                  Email
+                              </label>
+          <input type="email" name="email" class="form-control"  readonly="readonly"  value="<?php echo htmlentities($data['email']);?>">
+                            </div>
+
+
+
+                            
+                            <?php } ?>
+                            
                             
                             <button type="submit" name="submit" class="btn btn-o btn-primary">
-                              Submit
+                              Update
                             </button>
                           </form>
                         </div>
@@ -198,7 +175,8 @@ while($row=mysqli_fetch_array($ret))
                 </div>
       </div>
       <!-- Footer -->
-   <?php include('include/footer.php');?>
+  
+     <?php include('include/footer.php');?>
     </div>
   </div>
   <!-- Argon Scripts -->

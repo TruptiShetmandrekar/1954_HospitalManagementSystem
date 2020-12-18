@@ -56,7 +56,7 @@ if($query)
 								<input type="text" class="form-control" name="city" placeholder="City" required>
 							</div>
 							<div class="form-group">
-								<label class="block">
+								<label class="block ">
 									Gender
 								</label>
 								<div class="clip-radio radio-primary">
@@ -68,6 +68,9 @@ if($query)
 									<label for="rg-male">
 										Male
 									</label>
+
+									 <input type="radio" id="other" name="gender" value="other">
+  									<label for="other">Other</label>
 								</div>
 							</div>
 							<p>
