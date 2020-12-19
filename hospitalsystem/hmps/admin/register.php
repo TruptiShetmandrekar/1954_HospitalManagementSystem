@@ -65,9 +65,7 @@
 							</form>
 						</div>
 					</div>
-					<div class="footer">
-						Copyright &copy; 2017 &mdash; Your Company 
-					</div>
+					<?php include('include/footer.php');?>
 				</div>
 			</div>
 		</div>

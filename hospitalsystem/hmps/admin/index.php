@@ -4,7 +4,7 @@ error_reporting(0);
 include("include/config.php");
 if(isset($_POST['submit']))
 {
-$ret=$conn->query("SELECT * FROM admin WHERE email='".$_POST['email']."' and password='".$_POST['password']."'");
+$ret=$conn->query("SELECT * FROM admin WHERE email='".$_POST['email']."' and password='".md5($_POST['password'])."'");
 $num=mysqli_fetch_array($ret);
 if($num>0)
 {

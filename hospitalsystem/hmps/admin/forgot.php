@@ -39,9 +39,7 @@
 							</form>
 						</div>
 					</div>
-					<div class="footer">
-						MediCare we care
-					</div>
+				<?php include('include/footer.php');?>
 				</div>
 			</div>
 		</div>

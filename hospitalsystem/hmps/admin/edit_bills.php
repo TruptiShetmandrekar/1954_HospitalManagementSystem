@@ -4,7 +4,7 @@ session_start();
 include('include/config.php');
 include('include/checklogin.php');
 check_login();
-
+$did=intval($_GET['id']);// get doctor id
 if(isset($_POST['submit']))
 {
   $docspecialization=$_POST['Doctorspecialization'];
@@ -13,15 +13,15 @@ $docaddress=$_POST['clinicaddress'];
 $docfees=$_POST['docfees'];
 $doccontactno=$_POST['doccontact'];
 $docemail=$_POST['docemail'];
-$password=md5($_POST['npass']);
-$sql=$conn->query("insert into doctors(specilization,doctorName,address,docFees,contactno,docEmail,password) values('$docspecialization','$docname','$docaddress','$docfees','$doccontactno','$docemail','$password')");
-if($sql)
-{
-echo "<script>alert('Doctor info added Successfully');</script>";
+//$sql=$conn->query("Update doctors set specilization='$docspecialization',doctorName='$docname',address='$docaddress',docFees='$docfees',contactno='$doccontactno',docEmail='$docemail' where id='$did'");
+//if($sql)
+///{
+//echo "<script>alert('Doctor Details updated Successfully');</script>";
 
-}
+//}
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -42,24 +42,36 @@ echo "<script>alert('Doctor info added Successfully');</script>";
   <!-- Argon CSS -->
   <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
   <script type="text/javascript">
-function valid()
-{
- if(document.adddoc.npass.value!= document.adddoc.cfpass.value)
-{
-alert("Password and Confirm Password Field do not match  !!");
-document.adddoc.cfpass.focus();
-return false;
+function getdoctor(val) {
+  $.ajax({
+  type: "POST",
+  url: "get_doctors.php",
+  data:'specilizationid='+val,
+  success: function(data){
+    $("#doctor").html(data);
+  }
+  });
 }
-return true;
+</script> 
+
+
+<script>
+function getfee(val) {
+  $.ajax({
+  type: "POST",
+  url: "get_doctors.php",
+  data:'doctor='+val,
+  success: function(data){
+    $("#fees").html(data);
+  }
+  });
 }
-</script>
+</script> 
 
 </head>
 <body>
   <!-- Sidenav -->
-
-    <!-- Topnav -->
-     <?php include('include/sidebar.php');?> 
+   <?php include('include/sidebar.php');?> 
   <!-- Main content -->
   <div class="main-content" id="panel">
     <!-- Topnav -->
@@ -88,7 +100,7 @@ return true;
       </div>
     </div>
     <!-- Page content -->
-    <div class="col-xl-8 container-fluid mt--6 ">
+  <div class="col-xl-8 container-fluid mt--6 ">
           <div class="card">
             <div class="card-header">
                   
@@ -96,16 +108,27 @@ return true;
                     <div class="col-lg-8 col-md-12">
                       <div class="panel panel-white">
                         <div class="panel-heading">
-                          <h5 class="panel-title">Add Doctor</h5>
+                          <h5 class="panel-title">Generate Bills</h5>
                         </div>
+
                         <div class="panel-body">
-                  
-                          <form role="form" name="adddoc" method="post" onSubmit="return valid();">
+                  <?php $sql=$conn->query("select * from doctors where id='$did'");
+while($data=mysqli_fetch_array($sql))
+{
+?>
+                          <form role="form" action="pdf.php" method="POST">
+                            <div class="form-group">
+                              <label for="PatientName">
+                                PatientName
+                              </label>
+                  <input type="text" name="patientname" class="form-control" required="required"  >
+                            </div>
+
                             <div class="form-group">
                               <label for="DoctorSpecialization">
                                 Doctor Specialization
                               </label>
-              <select name="Doctorspecialization" class="form-control" required="required">
+              <select name="Doctorspecialization" class="form-control" onChange="getdoctor(this.value);" required="required">
                                 <option value="">Select Specialization</option>
 <?php $ret=$conn->query("select * from doctorspecilization");
 while($row=mysqli_fetch_array($ret))
@@ -119,62 +142,41 @@ while($row=mysqli_fetch_array($ret))
                               </select>
                             </div>
 
-<div class="form-group">
-                              <label for="doctorname">
-                                 Doctor Name
-                              </label>
-          <input type="text" name="docname" class="form-control"  placeholder="Enter Doctor Name">
-                            </div>
-
 
 <div class="form-group">
-                              <label for="address">
-                                 Doctor Clinic Address
+                              <label for="doctor">
+                                Doctors
                               </label>
-          <textarea name="clinicaddress" class="form-control"  placeholder="Enter Doctor Clinic Address"></textarea>
+            <select name="doctor" class="form-control" id="doctor" onChange="getfee(this.value);" required="required">
+            <option value="">Select Doctor</option>
+            </select>
                             </div>
+                            <div class="form-group">
+                              <label for="AppointmentDate">
+                                Date
+                              </label>
+                  <input class="form-control datepicker" name="appdate"  type="date" required="required">
+                            </div>
+
 <div class="form-group">
                               <label for="fess">
                                  Doctor Consultancy Fees
                               </label>
-          <input type="text" name="docfees" class="form-control"  placeholder="Enter Doctor Consultancy Fees">
+    <input type="text" name="docfees" class="form-control" required="required" onChange="getfee(this.value);"  >
                             </div>
   
 <div class="form-group">
                   <label for="fess">
-                                 Doctor Contact no
+                                 Hospital Fees
                               </label>
-          <input type="text" name="doccontact" class="form-control"  placeholder="Enter Doctor Contact no">
-                            </div>
-
-<div class="form-group">
-                  <label for="fess">
-                                 Doctor Email
-                              </label>
-          <input type="email" name="docemail" class="form-control"  placeholder="Enter Doctor Email id">
-                            </div>
-
-
-
-                            
-                            <div class="form-group">
-                              <label for="exampleInputPassword1">
-                                 Password
-                              </label>
-          <input type="password" name="npass" class="form-control"  placeholder="New Password" required="required">
+          <input type="text" name="hfees" class="form-control" required="required"  >
                             </div>
                             
-<div class="form-group">
-                              <label for="exampleInputPassword2">
-                                Confirm Password
-                              </label>
-                  <input type="password" name="cfpass" class="form-control"  placeholder="Confirm Password" required="required">
-                            </div>
-                            
+                            <?php } ?>
                             
                             
                             <button type="submit" name="submit" class="btn btn-o btn-primary">
-                              Submit
+                              Generate
                             </button>
                           </form>
                         </div>
@@ -193,7 +195,31 @@ while($row=mysqli_fetch_array($ret))
                 </div>
       </div>
       <!-- Footer -->
-<?php include('include/footer.php');?>
+      <footer class="footer pt-0">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6">
+            <div class="copyright text-center  text-lg-left  text-muted">
+              &copy; 2020 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">Creative Tim</a>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+              <li class="nav-item">
+                <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
+              </li>
+              <li class="nav-item">
+                <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
+              </li>
+              <li class="nav-item">
+                <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
     </div>
   </div>
   <!-- Argon Scripts -->

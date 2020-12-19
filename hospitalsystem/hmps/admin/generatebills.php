@@ -4,20 +4,15 @@ session_start();
 include('include/config.php');
 include('include/checklogin.php');
 check_login();
-if(isset($_GET['submit']))
-{
-$sql=$conn->query("insert into doctorSpecilization(specilization) values('".$_GET['doctorspecilization']."')");
-$_SESSION['msg']="Doctor Specialization added successfully !!";
-}
-
-if(isset($_GET['del']))
+if(isset($_GET['cancel']))
       {
-              $conn->query("delete from doctorSpecilization where id = '".$_GET['id']."'");
-                  $_SESSION['msg']="data deleted !!";
+              $conn->query("update appointment set userStatus='0' where id = '".$_GET['id']."'");
+                  $_SESSION['msg']="appointment canceled !!";
       }
-
-     
 ?>
+
+
+
 <!DOCTYPE html>
 <html>
 
@@ -37,11 +32,11 @@ if(isset($_GET['del']))
   <!-- Page plugins -->
   <!-- Argon CSS -->
   <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
-
 </head>
+
 <body>
   <!-- Sidenav -->
-
+  
     <!-- Topnav -->
      <?php include('include/sidebar.php');?> 
   <!-- Main content -->
@@ -54,8 +49,6 @@ if(isset($_GET['del']))
 
     <!-- Header -->
     <!-- Header -->
-
-
     <div class="header bg-primary pb-6">
       <div class="container-fluid">
         <div class="header-body">
@@ -70,77 +63,102 @@ if(isset($_GET['del']))
                 </ol>
               </nav>
             </div>
+           
           </div>
         </div>
       </div>
     </div>
     <!-- Page content -->
     <div class="container-fluid mt--6">
+      <div class="row">
+        <div class="col">
           <div class="card">
-            <div class="card-header">
+            <div class="card-header border-0">
               <div class="row align-items-center">
-                <div class="col-8">
-                  <h3 class="mb-0">Add specilization </h3>
+                <div class="col">
+                  <h3 class="mb-0">Appointments</h3>
                 </div>
-                
+                <div class="col text-right">
+                  <a href="#!" class="btn btn-sm btn-primary">See all</a>
+                </div>
               </div>
             </div>
-            <div class="card-body">
-              <form>
-                 <div class="card-body px-lg-5 py-lg-5">
-             
-                <p style="color:red;"><?php echo htmlentities($_SESSION['msg']);?>
-                <?php echo htmlentities($_SESSION['msg']="");?></p> 
-                <form role="form" name="dcotorspcl" method="post" >
-                <div class="form-group">
-                  <label >Doctor Specialization</label>
-                  <div class="input-group input-group-merge input-group-alternative mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
-                    </div>
-                    <input class="form-control" placeholder="Enter Doctor Specialization" name="doctorspecilization" type="text">
-                  </div>
-                </div>
-               
-                  <button type="submit" class="btn btn-primary mt-4" name="submit" >Submit</button>
-                          </form>
-                       
-                        </div>
-                <div class="table-responsive">
+            <p style="color:red;"><?php echo htmlentities($_SESSION['msg']);?>
+                <?php echo htmlentities($_SESSION['msg']="");?></p>
+            <div class="table-responsive">
               <!-- Projects table -->
+               
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Specialization</th>
-                    <th scope="col">Creation date</th>
-                    <th scope="col">updated Date</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  $sql=$conn->query("select * from doctorSpecilization");
-                  $cnt=1;
-                  while($row=mysqli_fetch_array($sql))
-                  {
-                  ?>
-                  <tr>
-                    <td scope="col"><?php echo $cnt;?>.</td>
-                        <td class="hidden-xs"><?php echo $row['specilization'];?></td>
-                        <td><?php echo $row['creationDate'];?></td>
-                        <td><?php echo $row['updationDate'];?>
+                   <th scope="col">#</th>
+                        <th class="hidden-xs">Doctor Name</th>
+                        <th>Specialization</th>
+                        <th class="hidden-xs">Patient Name</th>
+                        <th>Consultancy Fee</th>
+                        <th>Appointment Date / Time </th>
+                        <th>Appointment Creation Date  </th>
+                        <th>Current Status</th>
+                        <th>Action</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+<?php
+$sql=$conn->query("select doctors.doctorName as docname,patient.fullName as pname,appointment.* ,
+  Patient.fullName as ppname,patient.fullName as pppname,appointment.*  from appointment join doctors on doctors.id=appointment.doctorId join patient on patient.id=appointment.userId ");
+
+
+$cnt=1;
+while($row=mysqli_fetch_array($sql))
+  
+{
+?>
+
+
+
+
+                      <tr>
+                        <td scope="col"><?php echo $cnt;?>.</td>
+                        <td class="hidden-xs"><?php echo $row['docname'];?></td>
+                        <td><?php echo $row['doctorSpecialization'];?></td>
+                         <td class="hidden-xs"><?php echo $row['ppname'];?></td>
+                        <td><?php echo $row['consultancyFees'];?></td>
+                        <td><?php echo $row['appointmentDate'];?> / <?php echo
+                         $row['appointmentTime'];?>
                         </td>
+                        <td><?php echo $row['postingDate'];?></td>
+                        <td>
+<?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))  
+{
+  echo "Active";
+}
+if(($row['userStatus']==0) && ($row['doctorStatus']==1))  
+{
+  echo "Cancel by you";
+}
+
+if(($row['userStatus']==1) && ($row['doctorStatus']==0))  
+{
+  echo "Cancel by Doctor";
+}
+
+
+
+                        ?></td>
                         <td class="text-right">
-                          <div class="dropdown">
+                      <div class="dropdown">
                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="fas fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                          <a class="dropdown-item" href="edit_doctor_specialization.php?id=<?php echo $row['id'];?>" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit">Edit Specialisation</a>
+                          <a class="dropdown-item" href="edit_bills.php?id=<?php echo $row['id'];?>">Edit bill</a>
 
-                          <a class="dropdown-item" href="add_specilization.php?id=<?php echo $row['id']?>&del=delete" onClick="return confirm('Are you sure you want to delete?')" class="btn btn-transparent btn-xs">Delete</a>
-                       </div>
+                          <a class="dropdown-item" href="manage_doctors.php?id=<?php echo $row['id']?>&del=delete" onClick="return confirm('Are you sure you want to delete?')">Delete</a>
+                         
+
+                        </div>
+                      </div>
                     </td>
                       </tr>
                       
@@ -150,14 +168,12 @@ if(isset($_GET['del']))
                 </tbody>
               </table>
             </div>
-              </form>
-            </div>
           </div>
         </div>
       </div>
+      </div>
       <!-- Footer -->
-
-    <?php include('include/footer.php');?>
+      <?php include('include/footer.php');?>
     </div>
   </div>
   <!-- Argon Scripts -->
