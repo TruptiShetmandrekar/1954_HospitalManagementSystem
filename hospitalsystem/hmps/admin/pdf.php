@@ -13,6 +13,7 @@ $dat=$_POST['appdate'];
 $pname=$_POST['patientname'];
 $dname=$_POST['doctor'];
 $hfees=$_POST['hfees'];
+$lfees=$_POST['lfees'];
 $dfees=$_POST['docfees'];
 $dsep=$_POST['Doctorspecialization'];
 
@@ -53,7 +54,7 @@ $pdf->Cell(100	,5,'Bill to',0,1);//end of line
 $pdf->Cell(10	,5,'',0,0);
 $pdf->Cell(90	,5,$pname,0,1);
 
-$pdf->Cell(57	,5,'Doctor Identification Number:',0,0);
+$pdf->Cell(30	,5,'Doctor Name:',0,0);
 
 $pdf->Cell(57	,5,$dname,0,1);
 
@@ -69,14 +70,16 @@ $pdf->Cell(34	,5,'Amount',1,1);//end of line
 
 $pdf->Cell(150	,5,'Doctor Consultancy fee',1,0);
 $pdf->Cell(34	,5,$dfees,1,1);
-$pdf->Cell(150	,5,'Lab fee',1,0);
+$pdf->Cell(150	,5,'Hospital fee',1,0);
 $pdf->Cell(34	,5,$hfees,1,1);
+$pdf->Cell(150	,5,'lab fee',1,0);
+$pdf->Cell(34	,5,$lfees,1,1);
 
 $pdf->SetFont('Arial','',12);
 $pdf->Cell(125	,5,'',0,0);
 $pdf->Cell(25	,5,'Total',0,0);
 $pdf->Cell(4	,5,'$',1,0);
-$pdf->Cell(30	,5,number_format($dfees+$hfees),1,1,'R');//end of line
+$pdf->Cell(30	,5,number_format($dfees+$hfees+$lfees),1,1,'R');//end of line
 
 
 $pdf->Output();

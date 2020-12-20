@@ -56,7 +56,8 @@ return true;
 </head>
 <body>
     <!-- Sidenav -->
-<?php include('include/sidebar.php');?>
+<?php include('include/sidebar.php');?>  
+<div class="main-content" id="panel">
   <!-- Main content -->
  <?php include('include/header.php');?>
     <!-- Header -->
@@ -65,7 +66,7 @@ return true;
   <!-- Sidenav -->
   
   <!-- Main content -->
-  <div class="main-content" id="panel">
+
     <!-- Topnav -->
     
     <!-- Header -->
@@ -103,7 +104,7 @@ while($row=mysqli_fetch_array($query))
                     <div class="col-lg-8 col-md-12">
                       <div class="panel panel-white">
                         <div class="panel-heading">
-                          <h5 class="panel-title">Add Doctor</h5>
+                          <h5 class="panel-title">Edit Profile</h5>
                         </div>
                         <div class="panel-body">
                   

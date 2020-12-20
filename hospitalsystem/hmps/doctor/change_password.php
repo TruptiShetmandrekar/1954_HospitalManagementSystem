@@ -76,10 +76,10 @@ return true;
   <!-- Sidenav -->
   
   <!-- Main content -->
-
+<?php include('include/sidebar.php');?>
   <div class="main-content" id="panel">
     <!-- Topnav -->
-    <?php include('include/sidebar.php');?>
+    
   <!-- Main content -->
  <?php include('include/header.php');?>
     <!-- Header -->
@@ -117,7 +117,7 @@ while($row=mysqli_fetch_array($query))
                     <div class="col-lg-8 col-md-12">
                       <div class="panel panel-white">
                         <div class="panel-heading">
-                          <h5 class="panel-title">Add Doctor</h5>
+                          <h5 class="panel-title">Change Password</h5>
                         </div>
                         <div class="panel-body">
                           <p style="color:red;"><?php echo htmlentities($_SESSION['msg1']);?>

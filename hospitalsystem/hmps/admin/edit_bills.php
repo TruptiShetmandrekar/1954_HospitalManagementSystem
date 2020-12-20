@@ -4,21 +4,26 @@ session_start();
 include('include/config.php');
 include('include/checklogin.php');
 check_login();
-$did=intval($_GET['id']);// get doctor id
-if(isset($_POST['submit']))
+//$did=intval($_GET['id']);// get doctor id
+//$pid=intval($_GET['id']);
+if(isset($_GET['submit']))
 {
-  $docspecialization=$_POST['Doctorspecialization'];
-$docname=$_POST['docname'];
-$docaddress=$_POST['clinicaddress'];
-$docfees=$_POST['docfees'];
-$doccontactno=$_POST['doccontact'];
-$docemail=$_POST['docemail'];
-//$sql=$conn->query("Update doctors set specilization='$docspecialization',doctorName='$docname',address='$docaddress',docFees='$docfees',contactno='$doccontactno',docEmail='$docemail' where id='$did'");
-//if($sql)
-///{
-//echo "<script>alert('Doctor Details updated Successfully');</script>";
+  $docspecialization=$_GET['Doctorspecialization'];
+$docname=$_GET['doctor'];
+$docid=$_GET['doctorid'];
+$patname=$_GET['patientname'];
+$patid=$_GET['patientid'];
+$docfees=$_GET['docfees'];
+$hfees=$_GET['hfees'];
+$lfees=$_GET['lfees'];
+$billdate=$_GET['appdate'];
 
-//}
+$sql=$conn->query("insert into bill(doctorSpecilization,doctorId,doctorName,patientId,patientName,doctorFees,hospitalFees,labFees,billDate) values('$docspecialization','$docid','$docname','$patid','$patname','$docfees','$hfees','$lfees','$billdate')");
+if($sql)
+{
+echo "<script>alert(' info added Successfully');</script>";
+
+}
 }
 ?>
 
@@ -42,30 +47,7 @@ $docemail=$_POST['docemail'];
   <!-- Argon CSS -->
   <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
   <script type="text/javascript">
-function getdoctor(val) {
-  $.ajax({
-  type: "POST",
-  url: "get_doctors.php",
-  data:'specilizationid='+val,
-  success: function(data){
-    $("#doctor").html(data);
-  }
-  });
-}
-</script> 
 
-
-<script>
-function getfee(val) {
-  $.ajax({
-  type: "POST",
-  url: "get_doctors.php",
-  data:'doctor='+val,
-  success: function(data){
-    $("#fees").html(data);
-  }
-  });
-}
 </script> 
 
 </head>
@@ -112,45 +94,47 @@ function getfee(val) {
                         </div>
 
                         <div class="panel-body">
-                  <?php $sql=$conn->query("select * from doctors where id='$did'");
-while($data=mysqli_fetch_array($sql))
+
+                         
+                  <?php $sql=$conn->query("select doctors.doctorName as docname,doctors.id as did,doctors.docfees as docfees,patient.fullName as pname,patient.id as pid, appointment.* ,
+  Patient.fullName as ppname,patient.fullName as pppname,appointment.*  from appointment join doctors on doctors.id=appointment.doctorId join patient on patient.id=appointment.userId ");
+while($row=mysqli_fetch_array($sql))
 {
 ?>
-                          <form role="form" action="pdf.php" method="POST">
+                          <form role="form" action="pdf.php" name="adddoc" method="POST" >
                             <div class="form-group">
+                              <div class="form-group">
+                              <label for="PatientName">
+                                PatientId
+                              </label>
+              <input type="text" name="patientid" class="form-control" required="required" value="<?php echo $row['pid'];?>">
+                            </div>
                               <label for="PatientName">
                                 PatientName
                               </label>
-                  <input type="text" name="patientname" class="form-control" required="required"  >
+              <input type="text" name="patientname" class="form-control" required="required" value="<?php echo $row['ppname'];?>">
                             </div>
-
-                            <div class="form-group">
-                              <label for="DoctorSpecialization">
+                               <div class="form-group">
+                               <label for="DoctorSpecialization">
                                 Doctor Specialization
                               </label>
-              <select name="Doctorspecialization" class="form-control" onChange="getdoctor(this.value);" required="required">
-                                <option value="">Select Specialization</option>
-<?php $ret=$conn->query("select * from doctorspecilization");
-while($row=mysqli_fetch_array($ret))
-{
-?>
-                                <option value="<?php echo htmlentities($row['specilization']);?>">
-                                  <?php echo htmlentities($row['specilization']);?>
-                                </option>
-                                <?php } ?>
-                                
-                              </select>
+              <input type="text" name="Doctorspecialization" class="form-control"  required="required" value="<?php echo $row['doctorSpecialization'];?>">
                             </div>
-
-
-<div class="form-group">
-                              <label for="doctor">
-                                Doctors
+                            <div class="form-group">
+                              <label for="PatientName">
+                                DoctorId
                               </label>
-            <select name="doctor" class="form-control" id="doctor" onChange="getfee(this.value);" required="required">
-            <option value="">Select Doctor</option>
-            </select>
+              <input type="text" name="doctorid" class="form-control" required="required" value="<?php echo $row['did'];?>">
                             </div>
+
+                       <div class="form-group">
+                               <label for="DoctorSpecialization">
+                                Doctor Name
+                              </label>
+              <input type="text" name="doctor" class="form-control"  required="required" value="<?php echo $row['docname'];?>">
+                            </div>
+
+
                             <div class="form-group">
                               <label for="AppointmentDate">
                                 Date
@@ -162,7 +146,7 @@ while($row=mysqli_fetch_array($ret))
                               <label for="fess">
                                  Doctor Consultancy Fees
                               </label>
-    <input type="text" name="docfees" class="form-control" required="required" onChange="getfee(this.value);"  >
+    <input type="text" name="docfees" class="form-control" required="required" value="<?php echo $row['docfees'];?>"  >
                             </div>
   
 <div class="form-group">
@@ -171,6 +155,14 @@ while($row=mysqli_fetch_array($ret))
                               </label>
           <input type="text" name="hfees" class="form-control" required="required"  >
                             </div>
+                            <div class="form-group">
+                  <label for="fess">
+                                lab Fees
+                              </label>
+          <input type="text" name="lfees" class="form-control" required="required"  >
+                            </div>
+
+
                             
                             <?php } ?>
                             

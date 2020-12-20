@@ -30,15 +30,9 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="add_specilization.php">
+              <a class="nav-link" href="feedback.php">
                 <i class="ni ni-bullet-list-67 text-default"></i>
-                <span class="nav-link-text">Check Bills</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="manage_patients.php">
-                <i class="ni ni-single-02 text-yellow"></i>
-                <span class="nav-link-text">View Hospital Details </span>
+                <span class="nav-link-text">Feedback</span>
               </a>
             </li>
             <li class="nav-item">

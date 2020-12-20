@@ -59,6 +59,13 @@
                 <span class="nav-link-text">Generate bills</span>
               </a>
             </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="feedback.php">
+                <i class="ni ni-key-25 text-info"></i>
+                <span class="nav-link-text">check feedbacks</span>
+              </a>
+            </li>
           <!-- Divider -->
     
           

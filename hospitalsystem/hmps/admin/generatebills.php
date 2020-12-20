@@ -9,7 +9,15 @@ if(isset($_GET['cancel']))
               $conn->query("update appointment set userStatus='0' where id = '".$_GET['id']."'");
                   $_SESSION['msg']="appointment canceled !!";
       }
+
+      if(isset($_GET['del']))
+      {
+              $conn->query("delete from appointment where id = '".$_GET['id']."'");
+                  $_SESSION['msg']="data deleted !!";
+      }
 ?>
+
+
 
 
 
@@ -97,7 +105,7 @@ if(isset($_GET['cancel']))
                         <th class="hidden-xs">Patient Name</th>
                         <th>Consultancy Fee</th>
                         <th>Appointment Date / Time </th>
-                        <th>Appointment Creation Date  </th>
+                        
                         <th>Current Status</th>
                         <th>Action</th>
                         
@@ -127,7 +135,7 @@ while($row=mysqli_fetch_array($sql))
                         <td><?php echo $row['appointmentDate'];?> / <?php echo
                          $row['appointmentTime'];?>
                         </td>
-                        <td><?php echo $row['postingDate'];?></td>
+                        
                         <td>
 <?php if(($row['userStatus']==1) && ($row['doctorStatus']==1))  
 {
@@ -152,9 +160,9 @@ if(($row['userStatus']==1) && ($row['doctorStatus']==0))
                           <i class="fas fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                          <a class="dropdown-item" href="edit_bills.php?id=<?php echo $row['id'];?>">Edit bill</a>
+                          <a class="dropdown-item" href="edit_bills.php?id=<?php echo $row['id'];?>">Generate bill</a>
 
-                          <a class="dropdown-item" href="manage_doctors.php?id=<?php echo $row['id']?>&del=delete" onClick="return confirm('Are you sure you want to delete?')">Delete</a>
+                          <a class="dropdown-item" href="generatebills.php?id=<?php echo $row['id']?>&del=delete" onClick="return confirm('Are you sure you want to delete?')">Delete</a>
                          
 
                         </div>
